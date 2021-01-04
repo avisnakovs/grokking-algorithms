@@ -1,17 +1,31 @@
 package grokking_algorithms
 
-func QuickSort(slice []int) []int {
-	if len(slice) < 2 {
-		return slice
-	}
-	pivot := slice[0]
-	less, greater := make([]int, 0), make([]int, 0)
-	for _, i := range slice[1:] {
-		if i < pivot {
-			less = append(less, i)
+import "math/rand"
+
+type split struct {
+	less    []int
+	pivot   int
+	greater []int
+}
+
+func (s *split) add(slice []int) {
+	for _, value := range slice {
+		if value < s.pivot {
+			s.less = append(s.less, value)
 		} else {
-			greater = append(greater, i)
+			s.greater = append(s.greater, value)
 		}
 	}
-	return append(append(QuickSort(less), pivot), QuickSort(greater)...)
+}
+
+func QuickSort(slice []int) []int {
+	size := len(slice)
+	if size < 2 {
+		return slice
+	}
+	randomIndex := rand.Intn(size)
+	s := split{less: make([]int, 0), pivot: slice[randomIndex], greater: make([]int, 0)}
+	s.add(slice[:randomIndex])
+	s.add(slice[randomIndex+1:])
+	return append(append(QuickSort(s.less), s.pivot), QuickSort(s.greater)...)
 }
