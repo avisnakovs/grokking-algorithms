@@ -58,7 +58,105 @@ func TestDynamicKnapsack(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DynamicKnapsack(tt.args.elements, tt.args.totalSize)
 			assert.Equal(t, tt.want, got)
-			assert.Equal(t, tt.wantMaxPrice, got.maxPrice())
+			assert.Equal(t, tt.wantMaxPrice, got.lastValue())
+		})
+	}
+}
+
+func TestDynamicCommonSubstring(t *testing.T) {
+	type args struct {
+		first  string
+		second string
+	}
+	tests := []struct {
+		name             string
+		args             args
+		want             Table
+		wantSubstringLen int
+	}{
+		{
+			"fort fosh",
+			args{
+				first:  "fort",
+				second: "fosh",
+			},
+			[][]int{
+				{1, 0, 0, 0},
+				{0, 2, 0, 0},
+				{0, 0, 0, 0},
+				{0, 0, 0, 0},
+			},
+			2,
+		},
+		{
+			"fish fosh",
+			args{
+				first:  "fish",
+				second: "fosh",
+			},
+			[][]int{
+				{1, 0, 0, 0},
+				{0, 0, 0, 0},
+				{0, 0, 1, 0},
+				{0, 0, 0, 2},
+			},
+			2,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := DynamicCommonSubstring(tt.args.first, tt.args.second)
+			assert.Equal(t, tt.want, got)
+			assert.Equal(t, tt.wantSubstringLen, got.maxValue())
+		})
+	}
+}
+
+func TestDynamicCommonSequence(t *testing.T) {
+	type args struct {
+		first  string
+		second string
+	}
+	tests := []struct {
+		name            string
+		args            args
+		want            Table
+		wantSequenceLen int
+	}{
+		{
+			"fort fosh",
+			args{
+				first:  "fort",
+				second: "fosh",
+			},
+			[][]int{
+				{1, 1, 1, 1},
+				{1, 2, 2, 2},
+				{1, 2, 2, 2},
+				{1, 2, 2, 2},
+			},
+			2,
+		},
+		{
+			"fish fosh",
+			args{
+				first:  "fish",
+				second: "fosh",
+			},
+			[][]int{
+				{1, 1, 1, 1},
+				{1, 1, 1, 1},
+				{1, 1, 2, 2},
+				{1, 1, 2, 3},
+			},
+			3,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := DynamicCommonSequence(tt.args.first, tt.args.second)
+			assert.Equal(t, tt.want, got)
+			assert.Equal(t, tt.wantSequenceLen, got.lastValue())
 		})
 	}
 }
