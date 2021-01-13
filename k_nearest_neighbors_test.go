@@ -56,3 +56,23 @@ func TestCalculateDistance(t *testing.T) {
 		})
 	}
 }
+
+func TestGuessRate(t *testing.T) {
+	tests := []struct {
+		name             string
+		neighbourRatings []int
+		wantRate         float64
+		wantErr          error
+	}{
+		{"empty", []int{}, 0, ErrEmptyInput},
+		{"one neighbor", []int{1}, 1, nil},
+		{"five neighbor", []int{5, 4, 4, 5, 3}, 4.2, nil},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotRate, err := GuessRate(tt.neighbourRatings)
+			assert.Equal(t, tt.wantErr, err)
+			assert.Equal(t, tt.wantRate, gotRate)
+		})
+	}
+}

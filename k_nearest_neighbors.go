@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	ErrBadInput = errors.New("bad input")
+	ErrBadInput   = errors.New("bad input")
+	ErrEmptyInput = errors.New("empty input")
 )
 
 func CalculateDistance(firstRatings, secondRatings []int) (distance float64, err error) {
@@ -20,4 +21,15 @@ func CalculateDistance(firstRatings, secondRatings []int) (distance float64, err
 		sum += x * x
 	}
 	return math.Sqrt(float64(sum)), nil
+}
+
+func GuessRate(neighbourRatings []int) (rate float64, err error) {
+	if len(neighbourRatings) == 0 {
+		return 0, ErrEmptyInput
+	}
+	var sum int
+	for _, rating := range neighbourRatings {
+		sum += rating
+	}
+	return float64(sum) / float64(len(neighbourRatings)), nil
 }
